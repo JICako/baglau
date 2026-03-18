@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📋 Кері байланыс</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ─── TOP BAR ──────────────────────────────────────────── -->
+  <div class="top-bar">
+
+    <!-- Mode switcher -->
+    <div class="mode-switcher">
+      <button class="mode-btn active" id="btnJunior" onclick="setMode('junior')"></button>
+      <button class="mode-btn"        id="btnSenior" onclick="setMode('senior')"></button>
+    </div>
+
+    <!-- Fullscreen button -->
+    <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="Полноэкранный режим">
+      <span id="fsIcon">⛶</span>
+    </button>
+
+
+
+  </div>
+
+  <!-- ─── SLIDE DOTS ───────────────────────────────────────── -->
+  <div class="slide-dots">
+    <button class="dot active" onclick="goToSlide(0)"></button>
+    <button class="dot"        onclick="goToSlide(1)"></button>
+    <button class="dot"        onclick="goToSlide(2)"></button>
+  </div>
+
+  <!-- ─── SLIDES WRAPPER ───────────────────────────────────── -->
+  <div class="slides-wrapper">
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 1 — WORD CLOUD
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide0">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div class="slide-num junior-only" id="s1NumJ">01</div>
+          <div class="slide-num senior-only" id="s1NumS">01</div>
+          <h2 class="slide-title junior-only" id="s1TitleJ"></h2>
+          <h2 class="slide-title senior-only" id="s1TitleS"></h2>
+          <p  class="slide-sub junior-only"   id="s1SubJ"></p>
+          <p  class="slide-sub senior-only"   id="s1SubS"></p>
+        </div>
+
+        <div class="word-input-area">
+          <div class="input-group">
+            <input type="text" id="wordInput" class="word-field"
+                   onkeydown="if(event.key==='Enter')buildCloud()">
+            <button class="add-words-btn junior-only" id="wordBtnJ" onclick="buildCloud()"></button>
+            <button class="add-words-btn senior-only" id="wordBtnS" onclick="buildCloud()"></button>
+          </div>
+          <p class="hint junior-only" id="hintJ"></p>
+          <p class="hint senior-only" id="hintS"></p>
+        </div>
+
+        <div class="word-cloud"  id="wordCloud"></div>
+        <div class="cloud-footer">
+          <div class="cloud-stats" id="cloudStats"></div>
+          <button class="clear-cloud-btn junior-only" id="clearBtnJ" onclick="clearCloud()"></button>
+          <button class="clear-cloud-btn senior-only" id="clearBtnS" onclick="clearCloud()"></button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 2 — UNDERSTANDING
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide1">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div class="slide-num junior-only" id="s2NumJ">02</div>
+          <div class="slide-num senior-only" id="s2NumS">02</div>
+          <h2 class="slide-title junior-only" id="s2TitleJ"></h2>
+          <h2 class="slide-title senior-only" id="s2TitleS"></h2>
+          <p  class="slide-sub junior-only"   id="s2SubJ"></p>
+          <p  class="slide-sub senior-only"   id="s2SubS"></p>
+        </div>
+
+        <!-- Junior emoji grid -->
+        <div class="understanding-grid junior-only">
+          <button class="emoji-card" data-val="got"  onclick="selectUnderstanding(this,'got')">
+            <div class="emoji-big">😄</div>
+            <div class="emoji-label" id="lbl-got-j"></div>
+            <div class="emoji-count" id="cnt-got">0</div>
+          </button>
+          <button class="emoji-card" data-val="hard" onclick="selectUnderstanding(this,'hard')">
+            <div class="emoji-big">😐</div>
+            <div class="emoji-label" id="lbl-hard-j"></div>
+            <div class="emoji-count" id="cnt-hard">0</div>
+          </button>
+          <button class="emoji-card" data-val="no"   onclick="selectUnderstanding(this,'no')">
+            <div class="emoji-big">😢</div>
+            <div class="emoji-label" id="lbl-no-j"></div>
+            <div class="emoji-count" id="cnt-no">0</div>
+          </button>
+        </div>
+
+        <!-- Senior buttons + bar chart -->
+        <div class="senior-understanding senior-only">
+          <button class="senior-btn" data-val="got"  onclick="selectUnderstanding(this,'got')">
+            <div class="senior-btn-label" id="lbl-got-s"></div>
+            <div class="senior-btn-pct"   id="spct-got">—</div>
+          </button>
+          <button class="senior-btn" data-val="hard" onclick="selectUnderstanding(this,'hard')">
+            <div class="senior-btn-label" id="lbl-hard-s"></div>
+            <div class="senior-btn-pct"   id="spct-hard">—</div>
+          </button>
+          <button class="senior-btn" data-val="no"   onclick="selectUnderstanding(this,'no')">
+            <div class="senior-btn-label" id="lbl-no-s"></div>
+            <div class="senior-btn-pct"   id="spct-no">—</div>
+          </button>
+
+          <div class="pct-bar-wrap" id="pctBarWrap" style="display:none">
+            <div class="pct-row">
+              <span id="barLblGot"></span>
+              <div class="pct-track"><div class="pct-fill green"  id="bar-got"></div></div>
+              <span id="lbl-pct-got">0%</span>
+            </div>
+            <div class="pct-row">
+              <span id="barLblHard"></span>
+              <div class="pct-track"><div class="pct-fill yellow" id="bar-hard"></div></div>
+              <span id="lbl-pct-hard">0%</span>
+            </div>
+            <div class="pct-row">
+              <span id="barLblNo"></span>
+              <div class="pct-track"><div class="pct-fill red"    id="bar-no"></div></div>
+              <span id="lbl-pct-no">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="reset-btn junior-only" id="resetBtnJ" onclick="resetUnderstanding()"></button>
+        <button class="reset-btn senior-only" id="resetBtnS" onclick="resetUnderstanding()"></button>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         SLIDE 3 — SELF RATING
+    ══════════════════════════════════════════════════════════ -->
+    <div class="slide" id="slide2">
+      <div class="slide-inner">
+
+        <div class="slide-header">
+          <div class="slide-num junior-only" id="s3NumJ">03</div>
+          <div class="slide-num senior-only" id="s3NumS">03</div>
+          <h2 class="slide-title junior-only" id="s3TitleJ"></h2>
+          <h2 class="slide-title senior-only" id="s3TitleS"></h2>
+          <p  class="slide-sub junior-only"   id="s3SubJ"></p>
+          <p  class="slide-sub senior-only"   id="s3SubS"></p>
+        </div>
+
+        <div class="name-group">
+          <input type="text" id="studentName" class="name-field">
+        </div>
+
+        <!-- Junior: stars -->
+        <div class="junior-only">
+          <div class="star-row" id="starRow">
+            <button class="star-btn" data-v="1" onclick="setStars(1)">⭐</button>
+            <button class="star-btn" data-v="2" onclick="setStars(2)">⭐</button>
+            <button class="star-btn" data-v="3" onclick="setStars(3)">⭐</button>
+            <button class="star-btn" data-v="4" onclick="setStars(4)">⭐</button>
+            <button class="star-btn" data-v="5" onclick="setStars(5)">⭐</button>
+          </div>
+          <div class="star-praise" id="starPraise"></div>
+        </div>
+
+        <!-- Senior: 1-10 scale -->
+        <div class="senior-only">
+          <div class="scale-row"     id="scaleRow"></div>
+          <div class="scale-display" id="scaleDisplay">
+            <span class="scale-num"   id="scaleNum">—</span>
+            <span class="scale-label" id="scaleLabel"></span>
+          </div>
+        </div>
+
+        <button class="save-btn junior-only" id="saveBtnJ" onclick="saveRating()"></button>
+        <button class="save-btn senior-only" id="saveBtnS" onclick="saveRating()"></button>
+
+        <div class="saved-list" id="savedList"></div>
+        <button class="clear-ratings-btn junior-only" id="clearRatingsJ" onclick="clearRatings()"></button>
+        <button class="clear-ratings-btn senior-only" id="clearRatingsS" onclick="clearRatings()"></button>
+
+      </div>
+    </div>
+
+  </div><!-- .slides-wrapper -->
+
+  <!-- ─── NAV ARROWS ────────────────────────────────────────── -->
+  <button class="nav-arrow prev" id="prevBtn" onclick="prevSlide()">‹</button>
+  <button class="nav-arrow next" id="nextBtn" onclick="nextSlide()">›</button>
+
+  <!-- ─── CONFETTI CANVAS ───────────────────────────────────── -->
+  <canvas id="confettiCanvas"
+          style="position:fixed;top:0;left:0;pointer-events:none;z-index:9999;width:100%;height:100%;">
+  </canvas>
+
+  <!-- ─── SCRIPTS ──────────────────────────────────────────── -->
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
